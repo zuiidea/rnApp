@@ -7,25 +7,76 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
+  ActivityIndicator,
+  DrawerLayoutAndroid,
   StyleSheet,
   Text,
+  Image,
   View
 } from 'react-native';
+const TimerMixin = require('react-timer-mixin');
+
+const ToggleAnimatingActivityIndicator = React.createClass({
+  mixins: [TimerMixin],
+
+  getInitialState() {
+    return {
+      animating: true,
+    };
+  },
+
+  setToggleTimeout() {
+    this.setTimeout(() => {
+      this.setState({animating: !this.state.animating});
+      this.setToggleTimeout();
+    }, 2000);
+  },
+
+  componentDidMount() {
+    this.setToggleTimeout();
+  },
+
+  render() {
+    return (
+      <ActivityIndicator
+        animating={this.state.animating}
+        style={[styles.centering, {height: 80}]}
+        size="large"
+      />
+    );
+  }
+});
 
 class rnApp extends Component {
   render() {
+    var navigationView = (<View style={{flex: 1, backgroundColor: '#fff'}}>
+                            <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Im in the Drawer!</Text>
+                          </View>);
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
+        <Text style={styles.title}>
+          ActivityIndicator
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
+        <ToggleAnimatingActivityIndicator />
+        <Text style={styles.title}>
+        Image
         </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
+        <Image
+        style={styles.logo}
+        source={{uri: 'http://facebook.github.io/react/img/logo_og.png'}}
+        />
+        <Text style={styles.title}>
+          DrawerLayoutAndroid
         </Text>
+        <DrawerLayoutAndroid
+          drawerWidth={300}
+          drawerPosition={DrawerLayoutAndroid.positions.Left}
+          renderNavigationView={() => navigationView}>
+            <View style={{flex: 1, alignItems: 'center'}}>
+              <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>Hello</Text>
+              <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>World!</Text>
+            </View>
+        </DrawerLayoutAndroid>
       </View>
     );
   }
@@ -38,16 +89,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
+  title: {
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  logo:{
+    width:100,
+    height:100,
+  }
 });
 
 AppRegistry.registerComponent('rnApp', () => rnApp);
