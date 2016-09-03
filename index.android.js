@@ -12,8 +12,12 @@ import {
   StyleSheet,
   Text,
   Image,
+  ScrollView,
+  ListView,
   View
 } from 'react-native';
+import MyScene from './android/component/MyScene.js';
+import Button from 'react-native-button';
 const TimerMixin = require('react-timer-mixin');
 
 const ToggleAnimatingActivityIndicator = React.createClass({
@@ -47,12 +51,58 @@ const ToggleAnimatingActivityIndicator = React.createClass({
   }
 });
 
+class ListViewBasics extends Component {
+  // 初始化模拟数据
+  constructor(props) {
+    super(props);
+    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.state = {
+      dataSource: ds.cloneWithRows([
+        'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
+      ])
+    };
+  }
+  render() {
+    return (
+      <View style={{paddingTop: 22}}>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) => <Text>{rowData}</Text>}
+        />
+      </View>
+    );
+  }
+}
+
+class YoDawgApp extends Component {
+  render() {
+    return (
+      <MyScene />
+    )
+  }
+}
+
 class rnApp extends Component {
   render() {
+  fetch('http://api.map.baidu.com/telematics/v3/weather?location=%E6%88%90%E9%83%BD&output=json&ak=HQdwuP5YY3Gy8WaaGTOG0TsNFC4CeqoI', {
+       method: 'POST',
+       headers: {
+         'Accept': 'application/json',
+         'Content-Type': 'application/json',
+       },
+       body: JSON.stringify({
+         firstParam: 'yourValue',
+         secondParam: 'yourOtherValue',
+       })
+      }).then(function(response) {
+        console.log(response);
+        console.log("4444");
+      })
     var navigationView = (<View style={{flex: 1, backgroundColor: '#fff'}}>
                             <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Im in the Drawer!</Text>
                           </View>);
     return (
+      <ScrollView>
       <View style={styles.container}>
         <Text style={styles.title}>
           ActivityIndicator
@@ -77,7 +127,17 @@ class rnApp extends Component {
               <Text style={{margin: 10, fontSize: 15, textAlign: 'right'}}>World!</Text>
             </View>
         </DrawerLayoutAndroid>
+        <Text style={styles.title}>
+          ListView
+        </Text>
+        <ListViewBasics/>
+        <Text style={styles.title}>
+          Button66
+        </Text>
+        <Button>按钮6</Button>
+        <MyScene/>
       </View>
+      </ScrollView>
     );
   }
 }

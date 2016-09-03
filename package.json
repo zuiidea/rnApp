@@ -8,6 +8,10 @@
   "dependencies": {
     "antd-mobile": "^0.8.0",
     "react": "15.3.1",
-    "react-native": "0.32.0"
+    "react-native": "0.32.0",
+    "react-native-button": "^1.7.0"
+  },
+  "devDependencies": {
+    "antd-mobile": "^0.8.1"
   }
 }
